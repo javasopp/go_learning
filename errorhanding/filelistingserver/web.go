@@ -54,7 +54,7 @@ type userError interface {
 }
 
 func main() {
-	http.HandleFunc("/list/", errorWrapper(filelisting.FileListeningHandler))
+	http.HandleFunc("/", errorWrapper(filelisting.HandleFileList))
 	err := http.ListenAndServe(":8888", nil)
 	if err != nil {
 		return
