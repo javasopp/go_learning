@@ -30,7 +30,6 @@ func chanDemo() {
 	}
 
 	time.Sleep(time.Millisecond)
-	//var c chan int // c == nil
 }
 
 func main() {
@@ -42,10 +41,6 @@ func main() {
 
 func worker(id int, c chan int) {
 	for n := range c {
-		//n, ok := <-c
-		//if !ok {
-		//	break
-		//}
 		fmt.Printf("Worker %d received %c\n", id, n)
 	}
 }
