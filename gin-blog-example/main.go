@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
+	_ "gin-blog-example/docs"
 	"gin-blog-example/pkg/setting"
 	"gin-blog-example/routers"
 	"github.com/fvbock/endless"
-	"log"
+	"go.uber.org/zap"
 	"syscall"
 )
 
@@ -26,6 +27,18 @@ import (
 //	}
 //}
 
+func init() {
+	replaceLogger()
+}
+
+func replaceLogger() {
+	logger, _ := zap.NewProduction()
+	zap.ReplaceGlobals(logger)
+}
+
+// @title gin-blog API
+// @version 1.0
+// @description gin-blog的示例项目
 func main() {
 	endless.DefaultReadTimeOut = setting.ReadTimeout
 	endless.DefaultWriteTimeOut = setting.WriteTimeout
@@ -34,11 +47,11 @@ func main() {
 
 	server := endless.NewServer(endPoint, routers.InitRouter())
 	server.BeforeBegin = func(add string) {
-		log.Printf("Actual pid is %d", syscall.Getpid())
+		zap.L().Info("Actual pid is %d", zap.Int("pid", syscall.Getpid()))
 	}
 
 	err := server.ListenAndServe()
 	if err != nil {
-		log.Printf("Server err: %v", err)
+		zap.S().Infof("Server err: %v", err)
 	}
 }

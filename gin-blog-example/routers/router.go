@@ -6,6 +6,8 @@ import (
 	"gin-blog-example/routers/api"
 	v1 "gin-blog-example/routers/api/v1"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func InitRouter() *gin.Engine {
@@ -14,6 +16,7 @@ func InitRouter() *gin.Engine {
 	r.Use(gin.Logger())
 
 	r.Use(gin.Recovery())
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	gin.SetMode(setting.RunMode)
 
@@ -27,9 +30,9 @@ func InitRouter() *gin.Engine {
 		//新建标签
 		apiV1.POST("/tags", v1.AddTag)
 		//更新指定标签
-		apiV1.PUT("/tags/:id", v1.EditTag)
+		apiV1.PUT("/tags/update/:id", v1.EditTag)
 		//删除指定标签
-		apiV1.DELETE("/tags/:id", v1.DeleteTag)
+		apiV1.DELETE("/tags/delete/:id", v1.DeleteTag)
 
 		//获取文章列表
 		apiV1.GET("/articles", v1.GetArticles)
